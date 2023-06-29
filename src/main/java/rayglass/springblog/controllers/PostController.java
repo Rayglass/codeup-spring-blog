@@ -12,7 +12,7 @@ public class PostController {
 
     @GetMapping("/posts")
     @ResponseBody
-    public String viewPosts () {
+    public String index() {
         return "Posts index page";
     }
 
@@ -24,13 +24,13 @@ public class PostController {
 
     @GetMapping("/posts/create")
     @ResponseBody
-    public String showPostForm() {
+    public String insert() {
         return "view the form for creating a post!";
     }
 
     @PostMapping("/post/create")
     @ResponseBody
-    public String submitNewPost() {
+    public String submitPost() {
         return "submit new post";
     }
 }
