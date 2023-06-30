@@ -6,31 +6,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import rayglass.springblog.models.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class PostController {
 
-    @GetMapping("/posts")
-    @ResponseBody
-    public String index() {
-        return "Posts index page";
+    @GetMapping("/post")
+    public String post(Model model){
+        model.addAttribute("post", new Post("Hello", "Hello World"));
+        return "/posts/index";
     }
+
+    @GetMapping("/posts")
+    public String posts(Model model){
+        List<Post> posts = new ArrayList<>();
+        posts.add(new Post("Hello", "Hello World"));
+        posts.add(new Post("Hello Part 2", "Hello World Again :)"));
+        model.addAttribute("posts",posts);
+        return "/posts/show";
+    }
+
+
 
     @GetMapping("/posts/{id}")
-    @ResponseBody
-    public String singlePost(@PathVariable long id) {
-        return "Viewing post with the id: " + id;
+    public String showPost(Model model) {
+        Post post = new Post("Sample Post", "This is a sample post.");
+
+        model.addAttribute("post", post);
+        return "posts/show";
     }
 
-    @GetMapping("/posts/create")
+    @GetMapping("/create")
     @ResponseBody
     public String insert() {
         return "view the form for creating a post!";
     }
 
-    @PostMapping("/post/create")
+    @PostMapping("/create")
     @ResponseBody
-    public String submitPost() {
+    public String saveNewPost() {
         return "submit new post";
     }
 }

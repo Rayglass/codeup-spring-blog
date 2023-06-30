@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="partials/header.html">
+  <meta charset="UTF-8">
+  <title>Did You Win?</title>
+</head>
+<body>
+<div th:replace="partials/navbar.html"></div>
+<h3>User Selection <span th:text="${guess}"></span></h3>
+<h3>Random Number <span th:text="${random}"></span> </h3>
+
+<h2 th:if="${guess == random}"><b>WINNER!!!</b></h2>
+<h2 th:if="${guess != random}"><b>Sorry, you lost :(</b></h2>
+</body>
+</html>
