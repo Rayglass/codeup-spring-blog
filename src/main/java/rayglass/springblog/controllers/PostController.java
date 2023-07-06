@@ -1,52 +1,58 @@
 package rayglass.springblog.controllers;
-
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 import rayglass.springblog.models.Post;
 import rayglass.springblog.repositories.PostRepository;
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@AllArgsConstructor
+
 @Controller
+@RequestMapping("/posts")
 public class PostController {
+    private PostRepository postDao;
 
-    private final PostRepository postDao;
+    @GetMapping("")
+    public String posts(Model model){
+        List<Post> posts = postDao.findAll();
 
-    public PostController(PostRepository postDao) {
-        this.postDao = postDao;
-    }
-
-    @GetMapping("/posts")
-    public String viewPosts(Model model) {
-        model.addAttribute("posts", postDao.findAll());
-//        List<Post> allPosts = new ArrayList<>();
-//        allPosts.add(new Post("Post 1", "This is a test."));
-//        allPosts.add(new Post("Post 2", "Second post to test."));
-//        model.addAttribute("allPosts", allPosts);
-        return "/posts/index";
-    }
-
-
-    @GetMapping("/posts/show")
-    public String onePost(Model model) {
-        Post freshPost = new Post("Look", "This is a post");
-        model.addAttribute("freshPost", freshPost);
+        model.addAttribute("posts",posts);
         return "/posts/show";
     }
 
+    @GetMapping("/{id}")
+    public String showSinglePost(@PathVariable Long id, Model model){
+        // find the desired post in the db
+        Optional<Post> optionalPost = postDao.findById(id);
+        if(optionalPost.isEmpty()) {
+            System.out.printf("Post with id " + id + " not found!");
+            return "home";
+        }
 
-    @GetMapping("/posts/create")
-    public String showPostForm() {
+        // if we get here, then we found the post. so just open up the optional
+        model.addAttribute("post", optionalPost.get());
+        return "/posts/index";
+    }
+
+    @GetMapping("/create")
+    public String showCreate() {
         return "/posts/create";
     }
 
-    @PostMapping("/posts/create")
-    public String createPost(@RequestParam(name = "postTitle") String postTitle, @RequestParam(name = "postBody") String postBody, Model model) {
-        Post newPost = new Post();
-        newPost.setTitle(postTitle);
-        newPost.setBody(postBody);
-        model.addAttribute("newPost", newPost);
-        model.addAttribute("adding", postDao.save(newPost));
+    @PostMapping("/create")
+    public String doCreate(@RequestParam String title, @RequestParam String body) {
+        Post post = new Post();
+        post.setTitle(title);
+        post.setBody(body);
+
+        postDao.save(post);
+
         return "redirect:/posts";
     }
 }
