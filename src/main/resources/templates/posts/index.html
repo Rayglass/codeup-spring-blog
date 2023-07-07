@@ -1,22 +1,17 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>All Posts</title>
-</head>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
 <body>
-<header th:replace="partials/navbar"></header>
-
-<!-- Include the header partial -->
-<section th:replace="partials/header"></section>
-
-<h1>All Posts</h1>
-
-<h1 th:text="${post.getTitle()}"></h1>
-<h1 th:text="${post.getBody()}"></h1>
-
-<!-- Include the footer partial -->
-<footer th:replace="partials/footer"></footer>
+<div th:each="post : ${posts}">
+    <p th:text="${post.getTitle()}" />
+    <p th:text="${post.getBody()}" />
+</div>
 </body>
 </html>
