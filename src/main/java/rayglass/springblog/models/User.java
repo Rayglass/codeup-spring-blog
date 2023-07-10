@@ -21,18 +21,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String username;
+    @Column(length = 100)
+    private String userName;
 
-    @Column(nullable = false)
+    @Column(length = 100)
     private String email;
 
-    @Column(nullable = false)
+    @Column(length = 100)
     private String password;
 
-//    Establish Post to User Relationships
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "creator")
-    private List<Post> posts;
+    public User(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Post> post;
 
 }

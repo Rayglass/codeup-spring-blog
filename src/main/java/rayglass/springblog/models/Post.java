@@ -2,42 +2,28 @@ package rayglass.springblog.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@ToString
-
 @Entity
 @Table(name = "posts")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(nullable = false)
+    private Long id;
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String title;
-
-    @Column(length = 1024, nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
-//    Establish Post-User Relationship
-
     @ManyToOne
-    @JoinColumn(name = "creator_id")
-    // columnDefinition allows you to modify the table definition
-    private User creator;
-
-//    public Post(Long id, String title, String body) {
-//        this.id = id;
-//        this.title = title;
-//        this.body = body;
-//    }
-
-//    public Post(String title, String body) {
-//        this.title = title;
-//        this.body = body;
-//    }
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
+    public Post(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 }

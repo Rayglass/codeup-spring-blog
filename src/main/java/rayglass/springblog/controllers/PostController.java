@@ -1,4 +1,6 @@
 package rayglass.springblog.controllers;
+import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
+import rayglass.springblog.models.EmailService;
 import rayglass.springblog.models.Post;
 import rayglass.springblog.models.User;
 import rayglass.springblog.repositories.PostRepository;
@@ -12,53 +14,63 @@ import rayglass.springblog.repositories.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
 
 @Controller
-@RequestMapping("/posts")
 public class PostController {
-    private PostRepository postDao;
-    private UserRepository userDao;
+    private final PostRepository postsDao;
+    private final UserRepository userDao;
+    private final EmailService emailService;
 
-    @GetMapping("")
-    public String posts(Model model){
-        List<Post> posts = postDao.findAll();
-
-        model.addAttribute("posts",posts);
-        return "/posts/index";
+    public PostController(PostRepository postsDao, UserRepository userDao, EmailService emailService) {
+        this.postsDao = postsDao;
+        this.userDao = userDao;
+        this.emailService = emailService;
     }
 
-    @GetMapping("/{id}")
-    public String showSinglePost(@PathVariable Long id, Model model){
-        // find the desired post in the db
-        Optional<Post> optionalPost = postDao.findById(id);
-        if(optionalPost.isEmpty()) {
-            System.out.printf("Post with id " + id + " not found!");
-            return "home";
-        }
+    @GetMapping("/posts")
 
-        // if we get here, then we found the post. so just open up the optional
-        model.addAttribute("post", optionalPost.get());
-        return "/posts/show";
+    public String viewPosts(Model model) {
+        model.addAttribute("posts", postsDao.findAll());
+        return "posts/index";
     }
 
-    @GetMapping("/create")
-    public String showCreate() {
+
+    @GetMapping("/posts/{id}")
+    public String singlePost(@PathVariable long id, Model model) {
+        model.addAttribute("post", postsDao.findById(id).get());
+        return "posts/show";
+
+    }
+
+
+    @GetMapping("/posts/create")
+    public String showPostForm(Model model) {
+        //// Send a new Post object to the form, so we can find the inputs to the fields
+        model.addAttribute("post", new Post());
         return "/posts/create";
     }
 
-    @PostMapping("/create")
-    public String doCreate(@RequestParam String title, @RequestParam String body) {
-        Post post = new Post();
-        post.setTitle(title);
-        post.setBody(body);
+    @PostMapping("/posts/create")
+//    @RequestMapping(path = "/posts/create", method = RequestMethod.POST)
+    public String submitNewPost(@ModelAttribute Post post) {
+        emailService.prepareAndSend(post, "New Post Created!", post.getBody());
+        postsDao.save(post);
 
-        // TODO: use user id 1 for now. change later to currently logged in user
-        User loggedInUser = userDao.findById(2L).get();
-        post.setCreator(loggedInUser);
+        return "redirect:/posts";
 
-        postDao.save(post);
+    }
 
+    @GetMapping("/posts/{id}/edit")
+    public String showEditPostForm(@PathVariable long id, Model model) {
+        // show categories in form
+        Post post = postsDao.findById(id).get();
+        model.addAttribute("post", post);
+        return "/posts/edit";
+    }
+    @PostMapping("/posts/{id}/edit")
+    public String updatePost(@ModelAttribute Post post, @PathVariable long id) {
+        post.setId(id);
+        postsDao.save(post);
         return "redirect:/posts";
     }
 }
