@@ -5,4 +5,6 @@ import rayglass.springblog.models.Post;
 import rayglass.springblog.models.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUsername(String username);
 }
+

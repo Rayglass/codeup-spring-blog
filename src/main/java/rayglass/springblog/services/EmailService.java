@@ -1,4 +1,4 @@
-package rayglass.springblog.models;
+package rayglass.springblog.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,6 +6,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import rayglass.springblog.models.Post;
 
 @Service("mailService")
 public class EmailService {

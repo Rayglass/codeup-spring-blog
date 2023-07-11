@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/header.html">
-  <meta charset="UTF-8" />
-  <title>Create Post</title>
-</head>
-<body>
-<h1 class="text-center">Create Post</h1>
+  <head th:replace="partials/header.html">
+    <meta charset="UTF-8" />
+    <title>Create A New Post</title>
+  </head>
 
-<div class="container" style="width: 50%">
-  <form th:action="@{/posts/create}" th:method="post" th:object="${newPost}">
-    <div class="mb-3">
-      <label for="postTitle" class="form-label"><h3>Title</h3></label>
-      <input type="text" class="form-control" id="postTitle" name="postTitle" th:field="*{title}" />
-    </div>
-    <div class="mb-3">
-      <label for="postBody" class="form-label"><h3>Body</h3></label>
-      <textarea class="form-control" rows="10" cols="50" id="postBody" name="postBody" th:field="*{body}"></textarea>
-    </div>
-    <br>
-    <div><button type="submit">Create</button> </div>
-  </form>
-</div>
+  <body>
+  <h1 class="text-center">Create Post</h1>
+
+  <div class="container" style="width: 50%">
+    <form th:action="@{/posts/create}" th:method="post" th:object="${newPost}">
+
+      <div class="mb-3">
+        <label for="postTitle" class="form-label"><h3>Title</h3></label>
+        <input type="text" class="form-control" id="postTitle" name="postTitle" th:field="*{title}" />
+      </div>
+
+      <div class="mb-3">
+        <label for="postBody" class="form-label"><h3>Body</h3></label>
+        <textarea class="form-control" rows="10" cols="50" id="postBody" name="postBody" th:field="*{body}"></textarea>
+      </div>
+
+      <br>
+
+      <div><button type="submit">Create</button> </div>
+    </form>
+  </div>
+
+
+<footer th:replace="partials/footer.html"> </footer>
 </body>
 </html>

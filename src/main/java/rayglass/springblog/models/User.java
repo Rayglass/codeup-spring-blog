@@ -10,37 +10,28 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-
-
-
-
 @Entity
-@Table(name="blog_users")
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(length = 100)
-    private String userName;
-
-    @Column(length = 100)
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
+    private String username;
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String email;
-
-    @Column(length = 100)
+    @Column(nullable = false)
     private String password;
 
-    public User(String userName, String email, String password) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(Long id) {
-        this.id = id;
-    }
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Post> post;
+    List<Post> posts;
 
+
+    // This is known as a copy constructor, which will make a clone of the user object.
+    public User(User copy) {
+        this.id = copy.id;
+        this.email = copy.email;
+        this.username = copy.username;
+        this.password = copy.password;
+    }
 }

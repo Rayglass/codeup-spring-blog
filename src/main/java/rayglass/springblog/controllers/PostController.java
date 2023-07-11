@@ -1,17 +1,15 @@
 package rayglass.springblog.controllers;
-import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
-import rayglass.springblog.models.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import rayglass.springblog.services.EmailService;
 import rayglass.springblog.models.Post;
 import rayglass.springblog.models.User;
 import rayglass.springblog.repositories.PostRepository;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import rayglass.springblog.repositories.UserRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -30,7 +28,13 @@ public class PostController {
 
     @GetMapping("/posts")
     public String viewPosts(Model model) {
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("posts", postDao.findAll());
+
+        System.out.println(loggedInUser.getEmail());
+        System.out.println(loggedInUser.getPassword());
+        System.out.println(loggedInUser.getUsername());
+
         return "/posts/index";
     }
 
