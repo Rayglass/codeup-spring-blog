@@ -6,24 +6,29 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+
+
 @Entity
 @Table(name = "posts")
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
+
+    @Column(nullable = false, length = 100)
     private String title;
-    @Column(nullable = false, columnDefinition = "TEXT")
+
+    @Column(nullable = false)
     private String body;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn (name = "user_id")
     private User user;
-
 
     public Post(String title, String body) {
         this.title = title;
         this.body = body;
     }
+
 }

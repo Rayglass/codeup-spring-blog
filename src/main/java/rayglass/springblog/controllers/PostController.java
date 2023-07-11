@@ -17,60 +17,68 @@ import java.util.Optional;
 
 @Controller
 public class PostController {
-    private final PostRepository postsDao;
-    private final UserRepository userDao;
-    private final EmailService emailService;
 
-    public PostController(PostRepository postsDao, UserRepository userDao, EmailService emailService) {
-        this.postsDao = postsDao;
+    private final EmailService emailService;
+    private final PostRepository postDao;
+    private final UserRepository userDao;
+
+    public PostController(PostRepository postDao, UserRepository userDao, EmailService emailService) {
+        this.postDao = postDao;
         this.userDao = userDao;
         this.emailService = emailService;
     }
 
     @GetMapping("/posts")
-
     public String viewPosts(Model model) {
-        model.addAttribute("posts", postsDao.findAll());
-        return "posts/index";
+        model.addAttribute("posts", postDao.findAll());
+        return "/posts/index";
     }
-
 
     @GetMapping("/posts/{id}")
-    public String singlePost(@PathVariable long id, Model model) {
-        model.addAttribute("post", postsDao.findById(id).get());
-        return "posts/show";
+    public String onePost(@PathVariable Long id, Model model) {
+        Optional<Post> optionalPost = postDao.findById(id);
+        if (optionalPost.isEmpty()){
+            System.out.println("Can't find it!");
+        }
+        model.addAttribute("onePost", optionalPost.get());
+        User onePostUser = optionalPost.get().getUser();
+        model.addAttribute("onePostUserEmail", onePostUser.getEmail());
 
+        return "/posts/show";
     }
 
+    @GetMapping("/posts/{id}/edit")
+    public String editPost(@PathVariable Long id, Model model) {
+        Post editingPost = postDao.findById(id).get();
+        model.addAttribute("editingPost", editingPost);
+        return "posts/edit";
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    public String updatePost(@PathVariable Long id, @RequestParam(name = "postTitle") String postTitle, @RequestParam(name = "postBody") String postBody){
+        Post updatedPost = postDao.findById(id).get();
+        updatedPost.setTitle(postTitle);
+        updatedPost.setBody(postBody);
+        postDao.save(updatedPost);
+        return "redirect:/posts";
+    }
 
     @GetMapping("/posts/create")
     public String showPostForm(Model model) {
-        //// Send a new Post object to the form, so we can find the inputs to the fields
-        model.addAttribute("post", new Post());
+        model.addAttribute("newPost", new Post());
         return "/posts/create";
     }
 
     @PostMapping("/posts/create")
-//    @RequestMapping(path = "/posts/create", method = RequestMethod.POST)
-    public String submitNewPost(@ModelAttribute Post post) {
-        emailService.prepareAndSend(post, "New Post Created!", post.getBody());
-        postsDao.save(post);
-
-        return "redirect:/posts";
-
-    }
-
-    @GetMapping("/posts/{id}/edit")
-    public String showEditPostForm(@PathVariable long id, Model model) {
-        // show categories in form
-        Post post = postsDao.findById(id).get();
-        model.addAttribute("post", post);
-        return "/posts/edit";
-    }
-    @PostMapping("/posts/{id}/edit")
-    public String updatePost(@ModelAttribute Post post, @PathVariable long id) {
-        post.setId(id);
-        postsDao.save(post);
+    public String createPost(@ModelAttribute Post newPost) {
+        User user = userDao.findById(1L).get();
+//      post is created from pulled params and user id set to post
+        newPost.setUser(user);
+//      email sent to post creator
+        emailService.prepareAndSend(newPost, newPost.getTitle(), newPost.getBody());
+//      post is saved to db
+        postDao.save(newPost);
+//      redirected to all posts page
         return "redirect:/posts";
     }
 }
