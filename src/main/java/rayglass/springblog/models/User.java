@@ -6,32 +6,45 @@ import lombok.*;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 @Entity
-@Table(name="users")
+@Table(name = "Blog_Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
-    private String username;
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
+
+    @Column(length = 100, unique = true)
+    private String userName;
+
+    @Column(length = 100, unique = true)
     private String email;
-    @Column(nullable = false)
+
+    @Column(length = 100)
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    List<Post> posts;
-
-
-    // This is known as a copy constructor, which will make a clone of the user object.
-    public User(User copy) {
-        this.id = copy.id;
-        this.email = copy.email;
-        this.username = copy.username;
-        this.password = copy.password;
+    public User(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
+
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public User(User copy) {
+        id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+        email = copy.email;
+        userName = copy.userName;
+        password = copy.password;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Post> post;
+
 }

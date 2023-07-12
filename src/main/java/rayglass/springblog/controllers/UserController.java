@@ -11,8 +11,8 @@ import rayglass.springblog.repositories.UserRepository;
 
 @Controller
 public class UserController {
-    private UserRepository userDao;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userDao;
+    private final PasswordEncoder passwordEncoder;
 
     public UserController(UserRepository userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
@@ -22,7 +22,7 @@ public class UserController {
     @GetMapping("/sign-up")
     public String showSignupForm(Model model){
         model.addAttribute("user", new User());
-        return "users/sign-up";
+        return "/users/sign-up";
     }
 
     @PostMapping("/sign-up")

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="partials/header.html">
     <meta charset="UTF-8" />
     <title>Create Post</title>
@@ -22,7 +23,5 @@
         <a th:href="@{'/posts/' + ${editingPost.id}}" class="btn btn-primary">Cancel</a>
     </form>
 </div>
-
-<footer th:replace="partials/footer.html"> </footer>
 </body>
 </html>

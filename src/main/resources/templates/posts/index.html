@@ -1,41 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
 <head th:replace="partials/header.html">
-        <meta charset="UTF-8" />
-        <title>All Posts</title>
-    </head>
-
+    <meta charset="UTF-8" />
+    <title>All Posts</title>
+</head>
 <body>
-    <nav th:insert="partials/navbar"></nav>
-<!--    <h1>All Posts</h1>-->
-
-
-<!-- ... -->
-    <div sec:authorize="isAuthenticated()">
-        This content is only shown to authenticated users.
-
-        User ID: <span th:text="${#authentication.principal.id}"/>
-        Username: <span th:text="${#authentication.principal.username}"/>
-        Email: <span th:text="${#authentication.principal.email}"/>
-    </div>
-
-
-
-
-    <div class="container mx-auto d-flex flex-row" th:each="post : ${posts}">
-        <!--    <h3 th:text="${post.title}" />-->
-        <!--    <h4 th:text="${post.body}" />-->
-        <div class="card" style="width: 100%;">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${post.title}"></h5>
-                <p class="card-text" th:text="${post.body}"></p>
-                <a th:href="@{'/posts/' + ${post.id}}" class="btn btn-primary">View Post</a>
-                <a th:href="@{'/posts/' + ${post.id} + '/edit'}" class="btn btn-primary">Edit Post</a>
-            </div>
+<nav th:insert="partials/navbar"></nav>
+<h1>All Posts</h1>
+<div class="container mx-auto d-flex flex-row" th:each="post : ${posts}">
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${post.title}"></h5>
+            <p class="card-text" th:text="${post.body}"></p>
+            <a th:href="@{'/posts/' + ${post.id}}" class="btn btn-primary">View Post</a>
+            <a th:href="@{'/posts/' + ${post.id} + '/edit'}" class="btn btn-primary">Edit Post</a>
         </div>
     </div>
-<footer th:replace="partials/footer.html"> </footer>
+</div>
 </body>
 </html>

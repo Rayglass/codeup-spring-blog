@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="partials/header.html">
     <meta charset="UTF-8" />
     <title>View Post</title>
@@ -11,7 +12,5 @@
     <h2 th:text="${onePost.body}"></h2>
     <h3 th:text="${onePostUserEmail}"></h3>
 </div>
-
-<footer th:replace="partials/footer.html"> </footer>
 </body>
 </html>

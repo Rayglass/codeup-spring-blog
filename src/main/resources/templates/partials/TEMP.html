@@ -1,31 +1,42 @@
-
 <!DOCTYPE html>
-<html lang="en" xlms:th="http://www.thymeleaf.org" xmlns:xlms="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>navbar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
 </head>
 <body>
 <div th:fragment="navbar">
-  <nav class="navbar navbar-default bg-light mb-3 border">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/posts">Spring Blog</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 border">
+    <div class="container">
+      <a class="navbar-brand" href="/posts">Spring Blog</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/posts/create">Create</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/posts">View All Posts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/sign-up">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <form th:action="@{/logout}" th:method="post">
+              <button class="btn btn-link">Logout</button>
+            </form>
+          </li>
+        </ul>
       </div>
-      <ul class="nav navbar-nav navbar-right navbar-expand">
-        <li class="mr-4"><a href="/posts/create">Create</a></li>
-        <li><a href="/posts">View All Posts</a></li>
-
-        <li>
-          <form th:action="@{/logout}" th:method="post">
-            <button class="btn-link btn" style="margin-top: 8px">Logout</button>
-          </form>
-        </li>
-
-      </ul>
     </div>
   </nav>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -2,14 +2,13 @@ package rayglass.springblog.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
-@Table(name = "posts")
+@Table(name = "Blog_Posts")
 public class Post {
 
     @Id
@@ -30,5 +29,4 @@ public class Post {
         this.title = title;
         this.body = body;
     }
-
 }

@@ -10,8 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
-private String name;
-
-
-
+    private String name;
 }
